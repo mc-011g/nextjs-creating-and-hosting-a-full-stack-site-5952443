@@ -1,14 +1,5 @@
 import { NextRequest } from 'next/server';
-import { products } from '@/app/product-data';
 import { connectToDb } from '@/app/api/db';
-
-type ShoppingCart = Record<string, string[]>;
-
-const carts: ShoppingCart = {
-  '1': ['123', '234'],
-  '2': ['345', '456'],
-  '3': ['234'],
-}
 
 type Params = {
   id: string;
@@ -53,7 +44,7 @@ export async function POST(request: NextRequest, { params }: { params: Params })
 
   const updatedCart = await db.collection('carts').findOneAndUpdate(
     { userId },
-    { $push: { cartIds: productId } },
+    { $push: { cartIds: productId } },     
     { upsert: true, returnDocument: 'after' },
   )
 
@@ -66,6 +57,7 @@ export async function POST(request: NextRequest, { params }: { params: Params })
     }
   });
 }
+
 
 export async function DELETE(request: NextRequest, { params }: { params: Params }) {
   const { db } = await connectToDb();
